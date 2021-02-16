@@ -11,21 +11,16 @@
 <script>
 import ReminderItem from './ReminderItem.vue';
 
+import { mapState } from 'vuex';
+
 export default {
     components: {
         ReminderItem,
     },
-    data() {
-        return {
-            reminders: [
-                { note: 'example', date: '2019-01-01T10:15:00.000Z' },
-                { note: 'example', date: '2019-01-01T10:15:00.000Z' },
-                { note: 'example', date: '2019-01-01T10:15:00.000Z' },
-                { note: 'example', date: '2019-01-01T10:15:00.000Z' },
-                { note: 'example', date: '2019-01-01T10:15:00.000Z' },
-            ],
-        };
-    },
+
+    computed: mapState({
+        reminders: (state) => state.reminders.reminders,
+    }),
 };
 </script>
 

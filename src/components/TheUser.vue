@@ -2,17 +2,23 @@
     <div class="user">
         <div class="user__info user__name">
             Name:
-            <span>Simple Name</span>
+            <span> {{ user.name }}</span>
         </div>
         <div class="user__info user__id">
             ID:
-            <span>9dfg45-gds5f4g-sdfg549dfs-gsd</span>
+            <span>{{ user.id }}</span>
         </div>
     </div>
 </template>
 
 <script>
-export default {};
+import { mapState } from 'vuex';
+
+export default {
+    computed: mapState({
+        user: (state) => state.user.user,
+    }),
+};
 </script>
 
 <style lang="scss" scoped>

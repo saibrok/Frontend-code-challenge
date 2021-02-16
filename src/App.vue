@@ -3,11 +3,25 @@
         <div class="reminders">
             <header class="reminders__header">
                 <h1 class="reminders__title">Reminders</h1>
-                <TheButton class="reminders__login"> Войти </TheButton>
+                <TheButton
+                    v-if="!isAuthorized"
+                    class="reminders__login"
+                    @onClick="login"
+                >
+                    Войти
+                </TheButton>
+                <TheButton v-else class="reminders__login" @onClick="logout">
+                    Выйти
+                </TheButton>
             </header>
             <TheUser class="reminders__user" />
-            <TheButton class="reminders__add"> Добавить + </TheButton>
+
+            <TheButton class="reminders__add" @onClick="add">
+                Добавить +
+            </TheButton>
+
             <ReminderList />
+            <TheLoader v-if="isDataLoading" />
         </div>
         <div v-if="false" class="wrapper">
             <ReminderEdit class="reminder-edit" />
@@ -21,6 +35,9 @@ import ReminderList from './components/ReminderList.vue';
 import TheButton from './components/TheButton.vue';
 import TheUser from './components/TheUser.vue';
 
+import { mapState, mapGetters } from 'vuex';
+import TheLoader from './components/TheLoader.vue';
+
 export default {
     name: 'App',
     components: {
@@ -28,6 +45,40 @@ export default {
         ReminderList,
         TheButton,
         ReminderEdit,
+        TheLoader,
+    },
+
+    data() {
+        return {
+            user: this.$store.state.user.user,
+        };
+    },
+
+    computed: {
+        ...mapGetters('user', ['isAuthorized']),
+        ...mapState(['isDataLoading']),
+    },
+
+    methods: {
+        login() {
+            this.$store.dispatch('user/login');
+        },
+
+        logout() {
+            this.$store.dispatch('user/logout');
+        },
+
+        add() {
+            this.$store.dispatch('reminders/fetchReminders');
+        },
+    },
+
+    mounted() {
+        if (localStorage.name && localStorage.id) {
+            this.$store.dispatch('user/setUser');
+        } else {
+            this.$store.dispatch('user/logout');
+        }
     },
 };
 </script>

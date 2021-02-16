@@ -1,5 +1,5 @@
 <template>
-    <button class="button">
+    <button type="button" class="button" @click="onClick">
         <slot>
             <span>OK</span>
         </slot>
@@ -7,7 +7,13 @@
 </template>
 
 <script>
-export default {};
+export default {
+    methods: {
+        onClick() {
+            this.$emit('onClick');
+        },
+    },
+};
 </script>
 
 <style lang="scss" scoped>
