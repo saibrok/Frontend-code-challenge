@@ -1,5 +1,5 @@
 <template>
-    <button type="button" class="button" @click="onClick">
+    <button :type="type" class="button" :disabled="disabled" @click="onClick">
         <slot>
             <span>OK</span>
         </slot>
@@ -8,6 +8,14 @@
 
 <script>
 export default {
+    props: {
+        disabled: Boolean,
+        type: {
+            type: String,
+            default: 'button',
+        },
+    },
+
     methods: {
         onClick() {
             this.$emit('onClick');
@@ -25,5 +33,9 @@ export default {
     cursor: pointer;
     font-weight: bold;
     text-transform: uppercase;
+
+    &:disabled {
+        cursor: inherit;
+    }
 }
 </style>

@@ -3,8 +3,13 @@
         <div class="reminder__text">{{ reminder.note }}</div>
         <div class="reminder__date">{{ formatedDate }}</div>
         <div class="reminder__buttons">
-            <TheButton class="reminder__edit-button"> / </TheButton>
-            <TheButton class="reminder__delete-button"> X </TheButton>
+            <TheButton class="reminder__edit-button"> 🖉 </TheButton>
+            <TheButton
+                class="reminder__delete-button"
+                @onClick="deleteReminder(reminder.id)"
+            >
+                ✖️
+            </TheButton>
         </div>
     </li>
 </template>
@@ -22,7 +27,13 @@ export default {
 
     computed: {
         formatedDate() {
-            return new Date(this.reminder.date).toLocaleString();
+            return new Date(this.reminder.date).toLocaleString().slice(0, -3);
+        },
+    },
+
+    methods: {
+        deleteReminder(reminderId) {
+            this.$store.dispatch('reminders/deleteReminder', reminderId);
         },
     },
 };

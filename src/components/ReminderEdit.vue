@@ -1,22 +1,79 @@
 <template>
-    <div class="edit-popup">
+    <form class="edit-popup" @submit.prevent="createReminder">
         <h2 class="edit-popup__title">Новое напоминание</h2>
-        <TheButton class="edit-popup__close-button">X</TheButton>
+        <TheButton class="edit-popup__close-button" @onClick="closePopup">
+            X
+        </TheButton>
         <input
             class="edit-popup__input"
             type="text"
             placeholder="Введите текст напоминания"
+            v-model="note"
+            ref="inputtext"
         />
-        <input class="edit-popup__input" type="datetime-local" />
-        <TheButton class="edit-popup__save-button">Сохранить</TheButton>
-    </div>
+        <input
+            class="edit-popup__input"
+            type="datetime-local"
+            v-model="date"
+            :min="date"
+        />
+        <TheLoader class="loader" v-if="isDataLoading" />
+        <TheButton
+            v-else
+            :type="'submit'"
+            :disabled="disabled"
+            class="edit-popup__save-button"
+        >
+            Сохранить
+        </TheButton>
+    </form>
 </template>
 
 <script>
 import TheButton from './TheButton.vue';
+import TheLoader from './TheLoader.vue';
+
+import { mapState } from 'vuex';
+
 export default {
     components: {
         TheButton,
+        TheLoader,
+    },
+
+    data() {
+        return {
+            note: '',
+            date: new Date().toISOString().slice(0, -8),
+        };
+    },
+
+    computed: {
+        ...mapState(['isOpenPopup', 'isDataLoading']),
+        disabled() {
+            if (this.note.trim() && this.date) {
+                return false;
+            }
+
+            return true;
+        },
+    },
+
+    methods: {
+        createReminder() {
+            this.$store.dispatch('reminders/createReminder', {
+                note: this.note,
+                date: this.date,
+            });
+        },
+
+        closePopup() {
+            this.$store.dispatch('closePopup');
+        },
+    },
+
+    mounted() {
+        this.$refs.inputtext.focus();
     },
 };
 </script>

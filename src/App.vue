@@ -16,14 +16,18 @@
             </header>
             <TheUser class="reminders__user" />
 
-            <TheButton class="reminders__add" @onClick="add">
+            <TheButton
+                class="reminders__add"
+                @onClick="openPopup"
+                :disabled="!isAuthorized"
+            >
                 Добавить +
             </TheButton>
 
             <ReminderList />
-            <TheLoader v-if="isDataLoading" />
+            <TheLoader class="loader" v-if="isDataLoading" />
         </div>
-        <div v-if="false" class="wrapper">
+        <div v-if="isOpenPopup" class="wrapper" @click.self="closePopup">
             <ReminderEdit class="reminder-edit" />
         </div>
     </div>
@@ -56,7 +60,7 @@ export default {
 
     computed: {
         ...mapGetters('user', ['isAuthorized']),
-        ...mapState(['isDataLoading']),
+        ...mapState(['isOpenPopup', 'isDataLoading']),
     },
 
     methods: {
@@ -68,8 +72,12 @@ export default {
             this.$store.dispatch('user/logout');
         },
 
-        add() {
-            this.$store.dispatch('reminders/fetchReminders');
+        openPopup() {
+            this.$store.dispatch('openPopup');
+        },
+
+        closePopup() {
+            this.$store.dispatch('closePopup');
         },
     },
 
@@ -93,6 +101,15 @@ export default {
     border-radius: 0.5rem;
     box-shadow: 0px 8px 16px 8px rgba(34, 60, 80, 0.1);
     background-color: white;
+}
+
+.reminders {
+    display: flex;
+    flex-direction: column;
+}
+
+.loader {
+    align-self: center;
 }
 
 .reminders__header {

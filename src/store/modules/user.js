@@ -9,6 +9,7 @@ const state = {
 
 const getters = {
     isAuthorized: (state) => !!state.user.id,
+    getUserId: (state) => state.user.id,
 };
 
 const mutations = {
@@ -47,12 +48,14 @@ const actions = {
             });
     },
 
-    logout({ commit }) {
+    logout({ commit, dispatch }) {
         commit('LOGOUT');
+        dispatch('reminders/clearReminders', null, { root: true });
     },
 
-    setUser({ commit }) {
+    setUser({ commit, dispatch }) {
         commit('SET_USER');
+        dispatch('reminders/fetchReminders', null, { root: true });
     },
 };
 
