@@ -27,9 +27,12 @@
             <ReminderList />
             <TheLoader class="loader" v-if="isDataLoading" />
         </div>
+
         <div v-if="isOpenPopup" class="wrapper" @click.self="closePopup">
             <ReminderEdit class="reminder-edit" />
         </div>
+
+        <NotificationContainer />
     </div>
 </template>
 
@@ -38,6 +41,7 @@ import ReminderEdit from './components/ReminderEdit.vue';
 import ReminderList from './components/ReminderList.vue';
 import TheButton from './components/TheButton.vue';
 import TheUser from './components/TheUser.vue';
+import NotificationContainer from './components/NotificationContainer.vue';
 
 import { mapState, mapGetters } from 'vuex';
 import TheLoader from './components/TheLoader.vue';
@@ -50,6 +54,7 @@ export default {
         TheButton,
         ReminderEdit,
         TheLoader,
+        NotificationContainer,
     },
 
     data() {

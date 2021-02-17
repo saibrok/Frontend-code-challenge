@@ -1,5 +1,6 @@
 import axios from 'axios';
-const baseUrl = 'https://europe-west1-st-testcase.cloudfunctions.net/api';
+// const baseUrl = 'https://europe-west1-st-testcase.cloudfunctions.net/api';
+const baseUrl = 'http://localhost:3000/';
 
 const apiClient = axios.create({
     baseURL: baseUrl,
@@ -12,7 +13,7 @@ const apiClient = axios.create({
 
 export default {
     auth() {
-        return apiClient.post('/auth');
+        return apiClient.get('/auth'); // .post online
     },
 
     getAllReminders(userId) {
@@ -23,15 +24,14 @@ export default {
         return apiClient.post(`/reminders?userId=${userId}`, reminder);
     },
 
+    editReminder({ userId, reminderId, newReminder }) {
+        return apiClient.put(
+            `/reminders/${reminderId}?userId=${userId}`,
+            newReminder,
+        );
+    },
+
     deleteReminder({ userId, reminderId }) {
         return apiClient.delete(`/reminders/${reminderId}?userId=${userId}`);
     },
 };
-
-// Изменение напоминания по его id
-// PUT /api/reminders/{reminderId}?userId={userId}
-// { note: 'example', date: '2019-01-01T10:15:00.000Z' }
-
-// Удаление напоминания по его id
-// DELETE /api/reminders/{reminderId}?userId={userId}
-// };

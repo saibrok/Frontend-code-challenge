@@ -1,5 +1,5 @@
 <template>
-    <form class="edit-popup" @submit.prevent="createReminder">
+    <form class="edit-popup" @submit.prevent="submitReminder">
         <h2 class="edit-popup__title">Новое напоминание</h2>
         <TheButton class="edit-popup__close-button" @onClick="closePopup">
             X
@@ -43,13 +43,19 @@ export default {
 
     data() {
         return {
+            id: '',
             note: '',
-            date: new Date().toISOString().slice(0, -8),
+            date: '',
         };
     },
 
     computed: {
-        ...mapState(['isOpenPopup', 'isDataLoading']),
+        ...mapState({
+            isOpenPopup: 'isOpenPopup',
+            isDataLoading: 'isDataLoading',
+            currentReminder: (state) => state.reminders.currentReminder,
+        }),
+
         disabled() {
             if (this.note.trim() && this.date) {
                 return false;
@@ -60,8 +66,9 @@ export default {
     },
 
     methods: {
-        createReminder() {
-            this.$store.dispatch('reminders/createReminder', {
+        submitReminder() {
+            this.$store.dispatch('reminders/submitReminder', {
+                id: this.id,
                 note: this.note,
                 date: this.date,
             });
@@ -74,6 +81,10 @@ export default {
 
     mounted() {
         this.$refs.inputtext.focus();
+
+        this.id = this.currentReminder.id;
+        this.note = this.currentReminder.note;
+        this.date = this.currentReminder.date.toLocaleString().slice(0, -8);
     },
 };
 </script>

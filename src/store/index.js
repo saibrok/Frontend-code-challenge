@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import auth from '@/store/modules/auth';
 import reminders from '@/store/modules/reminders';
 import user from '@/store/modules/user';
+import notification from '@/store/modules/notification';
 
 Vue.use(Vuex);
 
@@ -36,14 +36,15 @@ export default new Vuex.Store({
             commit('OPEN_POPUP');
         },
 
-        closePopup({ commit }) {
+        closePopup({ commit, dispatch }) {
             commit('CLOSE_POPUP');
+            dispatch('reminders/clearCurrentReminder');
         },
     },
 
     modules: {
-        auth,
         reminders,
         user,
+        notification,
     },
 });

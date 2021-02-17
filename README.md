@@ -10,6 +10,7 @@ npm install
 npm run serve
 ```
 
+
 ### Compiles and minifies for production
 ```
 npm run build
@@ -22,3 +23,10 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Поднять json сервер
+```
+json-server --watch src/db/db.json
+в api.js поменять baseUrl на 'http://localhost:3000/'
+в auth() заменить post на get
+```

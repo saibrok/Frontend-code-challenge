@@ -39,12 +39,24 @@ const actions = {
                 commit('LOGIN', result.data);
             })
             .then(() => {
-                commit('SET_USER');
+                dispatch('setUser');
                 dispatch('setLoadingStatus', false, { root: true });
+
+                const notification = {
+                    type: 'success',
+                    message: 'Авторизация пройдена',
+                };
+                dispatch('notification/add', notification, { root: true });
             })
             .catch((error) => {
                 console.error(error);
                 dispatch('setLoadingStatus', false, { root: true });
+
+                const notification = {
+                    type: 'error',
+                    message: 'Problem: ' + error.message,
+                };
+                dispatch('notification/add', notification, { root: true });
             });
     },
 

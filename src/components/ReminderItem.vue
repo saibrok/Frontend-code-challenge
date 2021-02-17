@@ -3,7 +3,9 @@
         <div class="reminder__text">{{ reminder.note }}</div>
         <div class="reminder__date">{{ formatedDate }}</div>
         <div class="reminder__buttons">
-            <TheButton class="reminder__edit-button"> 🖉 </TheButton>
+            <TheButton class="reminder__edit-button" @onClick="editReminder">
+                🖉
+            </TheButton>
             <TheButton
                 class="reminder__delete-button"
                 @onClick="deleteReminder(reminder.id)"
@@ -32,6 +34,11 @@ export default {
     },
 
     methods: {
+        editReminder() {
+            this.$store.dispatch('reminders/setCurrentReminder', this.reminder);
+            this.$store.dispatch('openPopup');
+        },
+
         deleteReminder(reminderId) {
             this.$store.dispatch('reminders/deleteReminder', reminderId);
         },
@@ -41,9 +48,10 @@ export default {
 
 <style lang="scss" scoped>
 .reminder {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr;
     align-items: center;
+
     padding: 1rem 2rem;
     border-radius: 0.5rem;
     box-shadow: 0px 4px 8px 2px rgba(34, 60, 80, 0.2);
