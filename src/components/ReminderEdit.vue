@@ -9,19 +9,19 @@
                 class="edit-popup__input edit-popup__input-text"
                 type="text"
                 placeholder="Введите текст напоминания"
-                v-model="note"
+                v-model="reminder.note"
                 ref="inputtext"
                 :maxlength="maxLength"
             />
             <span class="edit-popup__counter"
-                >{{ note.length }} / {{ maxLength }}</span
+                >{{ reminder.note.length }} / {{ maxLength }}</span
             >
         </div>
         <div class="edit-popup__input-wrapper">
             <input
                 class="edit-popup__input edit-popup__input-date"
                 type="datetime-local"
-                v-model="date"
+                v-model="reminder.date"
                 :min="minDate"
                 :max="maxDate"
                 pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}"
@@ -53,11 +53,13 @@ export default {
 
     data() {
         return {
-            id: '',
-            note: '',
-            date: '',
+            reminder: {
+                id: '',
+                note: '',
+                date: '',
+            },
             maxLength: '200',
-            minDate: '2000-01-01T00:00',
+            minDate: '2020-01-01T00:00',
             maxDate: '2050-01-01T00:00',
         };
     },
@@ -70,7 +72,7 @@ export default {
         }),
 
         disabled() {
-            if (this.note.trim() && this.date) {
+            if (this.reminder.note.trim() && this.reminder.date) {
                 return false;
             }
 
@@ -80,11 +82,7 @@ export default {
 
     methods: {
         submitReminder() {
-            this.$store.dispatch('reminders/submitReminder', {
-                id: this.id,
-                note: this.note,
-                date: this.date,
-            });
+            this.$store.dispatch('reminders/submitReminder', this.reminder);
         },
 
         closePopup() {
@@ -95,9 +93,7 @@ export default {
     mounted() {
         this.$refs.inputtext.focus();
 
-        this.id = this.currentReminder.id;
-        this.note = this.currentReminder.note;
-        this.date = this.currentReminder.date;
+        Object.assign(this.reminder, this.currentReminder);
     },
 };
 </script>
