@@ -59,7 +59,7 @@ export default {
     display: flex;
     align-items: center;
     max-width: 100%;
-    padding: 1.5rem 1rem 1.5rem 2rem;
+    padding: 0.5rem 0.5rem 0.5rem 1.5rem;
     margin-bottom: 1rem;
     border-radius: 4px;
     box-shadow: 0px 4px 8px 2px rgba(34, 60, 80, 0.2);

@@ -48,6 +48,6 @@ export default {
 }
 
 .active {
-    background-color: khaki;
+    background-color: moccasin;
 }
 </style>

@@ -44,7 +44,7 @@ const actions = {
 
                 const notification = {
                     type: 'success',
-                    message: 'Авторизация пройдена',
+                    message: 'Вход выполнен',
                 };
                 dispatch('notification/add', notification, { root: true });
             })
@@ -64,6 +64,12 @@ const actions = {
         commit('LOGOUT');
         dispatch('reminders/clearReminders', null, { root: true });
         dispatch('reminders/setFilter', 'all', { root: true });
+
+        const notification = {
+            type: 'success',
+            message: 'Выход выполнен',
+        };
+        dispatch('notification/add', notification, { root: true });
     },
 
     setUser({ commit, dispatch }) {
