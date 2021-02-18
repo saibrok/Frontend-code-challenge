@@ -40,7 +40,7 @@ const actions = {
             })
             .then(() => {
                 dispatch('setUser');
-                dispatch('setLoadingStatus', false, { root: true });
+                // dispatch('setLoadingStatus', false, { root: true });
 
                 const notification = {
                     type: 'success',
@@ -63,6 +63,7 @@ const actions = {
     logout({ commit, dispatch }) {
         commit('LOGOUT');
         dispatch('reminders/clearReminders', null, { root: true });
+        dispatch('reminders/setFilter', 'all', { root: true });
     },
 
     setUser({ commit, dispatch }) {

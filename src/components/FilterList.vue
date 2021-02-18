@@ -2,12 +2,12 @@
     <div class="filters">
         <TheButton
             v-for="filter in filters"
-            :key="filter"
+            :key="filter.name"
             class="filter-button"
-            :class="{ active: activeFilter === `${filter}` }"
-            @onClick="toggleFilter(filter)"
+            :class="{ active: activeFilter === `${filter.name}` }"
+            @onClick="toggleFilter(filter.name)"
         >
-            {{ filter }}
+            {{ filter.title }}
         </TheButton>
     </div>
 </template>
@@ -19,7 +19,11 @@ export default {
     data() {
         return {
             activeFilter: 'all',
-            filters: ['all', 'active', 'overdue'],
+            filters: [
+                { name: 'all', title: 'Все' },
+                { name: 'active', title: 'Активные' },
+                { name: 'overdue', title: 'Просроченные' },
+            ],
         };
     },
 

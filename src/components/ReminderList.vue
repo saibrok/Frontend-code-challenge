@@ -1,14 +1,15 @@
 <template>
     <div class="reminders__wrapper">
-        <FilterList @toggleFilter="toggleFilter" />
-
-        <ul v-if="filteredReminders.length > 0" class="reminders__list">
-            <ReminderItem
-                v-for="reminder of filteredReminders"
-                :key="reminder.id"
-                :reminder="reminder"
-            />
-        </ul>
+        <template v-if="filteredReminders.length > 0">
+            <FilterList @toggleFilter="toggleFilter" />
+            <ul class="reminders__list">
+                <ReminderItem
+                    v-for="reminder of filteredReminders"
+                    :key="reminder.id"
+                    :reminder="reminder"
+                />
+            </ul>
+        </template>
         <div v-else-if="isAuthorized" class="reminders__empty">
             Список напоминаний пуст
         </div>
@@ -30,12 +31,6 @@ export default {
         TheLoader,
     },
 
-    data() {
-        return {
-            filteredReminders: '',
-        };
-    },
-
     computed: {
         ...mapGetters({
             all: 'reminders/allReminders',
@@ -43,18 +38,19 @@ export default {
             overdue: 'reminders/overdueReminders',
             isAuthorized: 'user/isAuthorized',
         }),
-        ...mapState(['isDataLoading']),
-        ...mapState('reminders', ['reminders']),
+
+        ...mapState({
+            reminders: (state) => state.reminders.reminders,
+            filteredReminders: (state) => state.reminders.filteredReminders,
+            isDataLoading: (state) => state.isDataLoading,
+        }),
     },
 
     methods: {
         toggleFilter(filter) {
-            this.filteredReminders = this[filter];
+            this.$store.dispatch('reminders/setFilter', filter);
+            this.$store.dispatch('reminders/filterReminders', filter);
         },
-    },
-
-    mounted() {
-        this.filteredReminders = this.reminders;
     },
 };
 </script>

@@ -107,6 +107,7 @@ export default {
     position: relative;
     display: flex;
     flex-direction: column;
+    align-items: stretch;
 }
 
 .edit-popup__title {
@@ -144,5 +145,9 @@ export default {
     top: 1rem;
     font-size: 0.8rem;
     color: darkgray;
+}
+
+.loader {
+    margin: 0 auto;
 }
 </style>
