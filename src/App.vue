@@ -25,10 +25,9 @@
             </TheButton>
 
             <ReminderList />
-            <TheLoader class="loader" v-if="isDataLoading" />
         </div>
 
-        <div v-if="isOpenPopup" class="wrapper" @click.self="closePopup">
+        <div v-if="isOpenPopup" class="wrapper" @mousedown.self="closePopup">
             <ReminderEdit class="reminder-edit" />
         </div>
 
@@ -44,7 +43,6 @@ import TheUser from './components/TheUser.vue';
 import NotificationContainer from './components/NotificationContainer.vue';
 
 import { mapState, mapGetters } from 'vuex';
-import TheLoader from './components/TheLoader.vue';
 
 export default {
     name: 'App',
@@ -53,7 +51,6 @@ export default {
         ReminderList,
         TheButton,
         ReminderEdit,
-        TheLoader,
         NotificationContainer,
     },
 
@@ -65,7 +62,7 @@ export default {
 
     computed: {
         ...mapGetters('user', ['isAuthorized']),
-        ...mapState(['isOpenPopup', 'isDataLoading']),
+        ...mapState(['isOpenPopup']),
     },
 
     methods: {
@@ -113,10 +110,6 @@ export default {
     flex-direction: column;
 }
 
-.loader {
-    align-self: center;
-}
-
 .reminders__header {
     display: flex;
     justify-content: space-between;
@@ -132,7 +125,7 @@ export default {
 }
 
 .wrapper {
-    position: absolute;
+    position: fixed;
     display: flex;
     justify-content: center;
     align-items: center;

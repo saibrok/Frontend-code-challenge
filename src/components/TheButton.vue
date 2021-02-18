@@ -27,7 +27,7 @@ export default {
 <style lang="scss" scoped>
 .button {
     min-width: 3rem;
-    padding: 1rem 0.5rem;
+    padding: 1rem;
     border: none;
     border-radius: 4px;
     cursor: pointer;

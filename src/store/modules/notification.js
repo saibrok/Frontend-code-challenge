@@ -3,16 +3,19 @@ let nextId = 0;
 const state = {
     notifications: [
         {
+            id: 132,
             type: 'error',
-            message: 'Problem',
+            message: 'example: Problem',
         },
         {
+            id: 133,
             type: 'success',
-            message: "It's OK",
+            message: "example: It's OK",
         },
         {
+            id: 134,
             type: 'attention',
-            message: 'Текст напоминания',
+            message: 'example: Текст напоминания',
         },
     ],
 };

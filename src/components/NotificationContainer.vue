@@ -25,6 +25,7 @@ export default {
 <style scoped>
 .notification-container {
     position: fixed;
+    max-width: 50%;
     bottom: 0;
     right: 1rem;
     display: flex;

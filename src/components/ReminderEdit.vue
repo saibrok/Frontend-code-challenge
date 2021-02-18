@@ -4,19 +4,29 @@
         <TheButton class="edit-popup__close-button" @onClick="closePopup">
             X
         </TheButton>
-        <input
-            class="edit-popup__input"
-            type="text"
-            placeholder="Введите текст напоминания"
-            v-model="note"
-            ref="inputtext"
-        />
-        <input
-            class="edit-popup__input"
-            type="datetime-local"
-            v-model="date"
-            :min="date"
-        />
+        <div class="edit-popup__input-wrapper">
+            <input
+                class="edit-popup__input edit-popup__input-text"
+                type="text"
+                placeholder="Введите текст напоминания"
+                v-model="note"
+                ref="inputtext"
+                :maxlength="maxLength"
+            />
+            <span class="edit-popup__counter"
+                >{{ note.length }} / {{ maxLength }}</span
+            >
+        </div>
+        <div class="edit-popup__input-wrapper">
+            <input
+                class="edit-popup__input edit-popup__input-date"
+                type="datetime-local"
+                v-model="date"
+                :min="minDate"
+                :max="maxDate"
+                pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}"
+            />
+        </div>
         <TheLoader class="loader" v-if="isDataLoading" />
         <TheButton
             v-else
@@ -46,6 +56,9 @@ export default {
             id: '',
             note: '',
             date: '',
+            maxLength: '200',
+            minDate: '2000-01-01T00:00',
+            maxDate: '2050-01-01T00:00',
         };
     },
 
@@ -84,7 +97,7 @@ export default {
 
         this.id = this.currentReminder.id;
         this.note = this.currentReminder.note;
-        this.date = this.currentReminder.date.toLocaleString().slice(0, -8);
+        this.date = this.currentReminder.date;
     },
 };
 </script>
@@ -106,7 +119,12 @@ export default {
     right: 1rem;
 }
 
+.edit-popup__input-wrapper {
+    position: relative;
+}
+
 .edit-popup__input {
+    width: 100%;
     margin-bottom: 2rem;
     padding: 0.5rem 1rem;
     border: none;
@@ -114,5 +132,17 @@ export default {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     outline: none;
     font-size: inherit;
+
+    &-text {
+        padding-right: 3.5rem;
+    }
+}
+
+.edit-popup__counter {
+    position: absolute;
+    right: 0;
+    top: 1rem;
+    font-size: 0.8rem;
+    color: darkgray;
 }
 </style>

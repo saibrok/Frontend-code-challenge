@@ -1,16 +1,16 @@
 <template>
-    <li class="reminder">
+    <li class="reminder" :class="{ expired: expired }">
         <div class="reminder__text">{{ reminder.note }}</div>
         <div class="reminder__date">{{ formatedDate }}</div>
         <div class="reminder__buttons">
             <TheButton class="reminder__edit-button" @onClick="editReminder">
-                🖉
+                ✒️
             </TheButton>
             <TheButton
                 class="reminder__delete-button"
                 @onClick="deleteReminder(reminder.id)"
             >
-                ✖️
+                🗑️
             </TheButton>
         </div>
     </li>
@@ -27,6 +27,13 @@ export default {
         },
     },
 
+    data() {
+        return {
+            expired: false,
+            interval: null,
+        };
+    },
+
     computed: {
         formatedDate() {
             return new Date(this.reminder.date).toLocaleString().slice(0, -3);
@@ -35,7 +42,11 @@ export default {
 
     methods: {
         editReminder() {
-            this.$store.dispatch('reminders/setCurrentReminder', this.reminder);
+            const currentReminder = Object.assign({}, this.reminder);
+            this.$store.dispatch(
+                'reminders/setCurrentReminder',
+                currentReminder,
+            );
             this.$store.dispatch('openPopup');
         },
 
@@ -43,13 +54,41 @@ export default {
             this.$store.dispatch('reminders/deleteReminder', reminderId);
         },
     },
+
+    mounted() {
+        if (+new Date(this.reminder.date) < Date.now()) {
+            this.expired = true;
+        }
+
+        const notification = {
+            type: 'attention',
+            message: this.reminder.note,
+        };
+
+        if (this.expired === false) {
+            this.interval = setInterval(() => {
+                if (+new Date(this.reminder.date) < Date.now()) {
+                    this.$store.dispatch('notification/add', notification, {
+                        root: true,
+                    });
+                    this.expired = true;
+                    clearInterval(this.interval);
+                }
+            }, 1000);
+        }
+    },
+
+    beforeDestroy() {
+        clearInterval(this.interval);
+    },
 };
 </script>
 
 <style lang="scss" scoped>
 .reminder {
     display: grid;
-    grid-template-columns: 3fr 1fr 1fr;
+    grid-template-columns: 2.3fr 1fr 0.9fr;
+    column-gap: 1rem;
     align-items: center;
 
     padding: 1rem 2rem;
@@ -63,6 +102,10 @@ export default {
     }
 }
 
+.reminder__text {
+    word-break: break-word;
+}
+
 .reminder__edit-button {
     margin-right: 1rem;
     color: lightsteelblue;
@@ -72,5 +115,9 @@ export default {
 .reminder__delete-button {
     color: wheat;
     background-color: indianred;
+}
+
+.expired {
+    background-color: pink;
 }
 </style>

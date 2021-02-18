@@ -5,13 +5,31 @@ const state = {
     currentReminder: {
         id: '',
         note: '',
-        date: new Date().toISOString(),
+        date: '',
     },
+};
+
+const getters = {
+    allReminders: (state) => state.reminders,
+
+    activeReminders: (state) =>
+        state.reminders.filter((reminder) => {
+            return new Date(reminder.date) > new Date();
+        }),
+
+    overdueReminders: (state) =>
+        state.reminders.filter((reminder) => {
+            return new Date(reminder.date) <= new Date();
+        }),
 };
 
 const mutations = {
     SET_REMINDERS(state, reminders) {
         state.reminders = reminders;
+    },
+
+    SET_FILTERED_REMINDERS(state, filteredReminders) {
+        state.filteredReminders = filteredReminders;
     },
 
     CLEAR_REMINDERS(state) {
@@ -25,7 +43,7 @@ const mutations = {
     CLEAR_CURRENT_REMINDER(state) {
         state.currentReminder.id = '';
         state.currentReminder.note = '';
-        state.currentReminder.date = new Date().toISOString();
+        state.currentReminder.date = '';
     },
 };
 
@@ -34,14 +52,16 @@ const actions = {
         dispatch('setLoadingStatus', true, { root: true });
         const userId = rootGetters['user/getUserId'];
 
-        api.getAllReminders(userId)
+        api.getReminders(userId)
             .then((result) => {
-                commit('SET_REMINDERS', result.data);
+                const reminders = result.data;
+                dispatch('sortAndFormatReminders', reminders);
+                commit('SET_REMINDERS', reminders);
                 dispatch('setLoadingStatus', false, { root: true });
 
                 const notification = {
                     type: 'success',
-                    message: 'Напоминания загружены',
+                    message: 'Напоминания обновлены',
                 };
                 dispatch('notification/add', notification, { root: true });
             })
@@ -61,9 +81,15 @@ const actions = {
         dispatch('setLoadingStatus', true, { root: true });
         const userId = rootGetters['user/getUserId'];
 
+        const newDate = new Date(reminder.date);
+        newDate.setTime(
+            newDate.getTime() - newDate.getTimezoneOffset() * 60 * 1000,
+        );
+        reminder.date = newDate;
+
         api.createReminder({ userId, reminder })
             .then(() => {
-                state.reminders.push(reminder);
+                dispatch('fetchReminders');
                 dispatch('setLoadingStatus', false, { root: true });
                 dispatch('closePopup', null, { root: true });
             })
@@ -77,12 +103,19 @@ const actions = {
         dispatch('setLoadingStatus', true, { root: true });
         const userId = rootGetters['user/getUserId'];
 
+        const newDate = new Date(newReminder.date);
+        newDate.setTime(
+            newDate.getTime() - newDate.getTimezoneOffset() * 60 * 1000,
+        );
+        newReminder.date = newDate;
+
         api.editReminder({ userId, reminderId, newReminder })
             .then(() => {
                 state.reminders = state.reminders.filter((reminder) => {
                     return reminder.id !== reminderId;
                 });
-                state.reminders.push(newReminder);
+
+                dispatch('fetchReminders');
                 dispatch('setLoadingStatus', false, { root: true });
                 dispatch('closePopup', null, { root: true });
             })
@@ -114,11 +147,8 @@ const actions = {
         const reminderId = reminder.id;
 
         if (reminder.id === '') {
-            console.log(newReminder);
             dispatch('createReminder', newReminder);
         } else {
-            console.log(reminderId);
-            console.log(newReminder);
             dispatch('editReminder', { reminderId, newReminder });
         }
     },
@@ -134,11 +164,19 @@ const actions = {
     clearCurrentReminder({ commit }) {
         commit('CLEAR_CURRENT_REMINDER');
     },
+
+    sortAndFormatReminders(context, reminders) {
+        reminders.forEach((reminder) => {
+            reminder.date = new Date(reminder.date).toISOString().slice(0, -8);
+        });
+        reminders.sort((a, b) => (a['date'] > b['date'] ? 1 : -1));
+    },
 };
 
 export default {
     namespaced: true,
     state,
+    getters,
     actions,
     mutations,
 };
