@@ -93,6 +93,14 @@ export default {
         }
     },
 
+    updated() {
+        if (+new Date(this.reminder.date) < Date.now()) {
+            this.expired = true;
+        } else {
+            this.expired = false;
+        }
+    },
+
     beforeDestroy() {
         clearInterval(this.interval);
     },
