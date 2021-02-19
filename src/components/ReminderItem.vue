@@ -5,7 +5,7 @@
         @click="openReminderView"
     >
         <div class="reminder__text">{{ reminder.note }}</div>
-        <div class="reminder__date">{{ formatedDate }}</div>
+        <div class="reminder__date">{{ reminder.date | formatDate }}</div>
         <div class="reminder__buttons">
             <TheButton class="reminder__edit-button" @onClick="editReminder">
                 ✒️
@@ -22,6 +22,8 @@
 
 <script>
 import TheButton from './TheButton.vue';
+import formatDate from '@/filters/formatDate';
+
 export default {
     components: { TheButton },
 
@@ -38,10 +40,8 @@ export default {
         };
     },
 
-    computed: {
-        formatedDate() {
-            return new Date(this.reminder.date).toLocaleString().slice(0, -3);
-        },
+    filters: {
+        formatDate,
     },
 
     methods: {

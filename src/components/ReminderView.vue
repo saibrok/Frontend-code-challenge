@@ -4,24 +4,24 @@
             {{ currentReminder.note }}
         </div>
         <div class="reminder-view__input-date">
-            {{ formatedDate }}
+            {{ currentReminder.date | formatDate }}
         </div>
     </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import formatDate from '@/filters/formatDate';
 
 export default {
+    filters: {
+        formatDate,
+    },
+
     computed: {
         ...mapState({
             currentReminder: (state) => state.reminders.currentReminder,
         }),
-        formatedDate() {
-            return new Date(this.currentReminder.date)
-                .toLocaleString()
-                .slice(0, -3);
-        },
     },
 };
 </script>

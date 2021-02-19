@@ -41,7 +41,7 @@ export default {
 .popup {
     position: relative;
     width: 600px;
-    padding: 2rem;
+    padding: 2.5rem;
     border-radius: 0.5rem;
     background-color: white;
     box-shadow: 0px 8px 16px 8px rgba(34, 60, 80, 0.1);
