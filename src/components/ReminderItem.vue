@@ -1,5 +1,9 @@
 <template>
-    <li class="reminder" :class="{ expired: expired }">
+    <li
+        class="reminder"
+        :class="{ expired: expired }"
+        @click="openReminderView"
+    >
         <div class="reminder__text">{{ reminder.note }}</div>
         <div class="reminder__date">{{ formatedDate }}</div>
         <div class="reminder__buttons">
@@ -47,11 +51,22 @@ export default {
                 'reminders/setCurrentReminder',
                 currentReminder,
             );
+            this.$store.dispatch('setPopupContent', 'ReminderEdit');
             this.$store.dispatch('openPopup');
         },
 
         deleteReminder(reminderId) {
             this.$store.dispatch('reminders/deleteReminder', reminderId);
+        },
+
+        openReminderView() {
+            const currentReminder = Object.assign({}, this.reminder);
+            this.$store.dispatch(
+                'reminders/setCurrentReminder',
+                currentReminder,
+            );
+            this.$store.dispatch('setPopupContent', 'ReminderView');
+            this.$store.dispatch('openPopup');
         },
     },
 
@@ -90,11 +105,11 @@ export default {
     grid-template-columns: 2.3fr 1fr 0.9fr;
     column-gap: 1rem;
     align-items: center;
-
-    padding: 1rem 2rem;
+    padding: 1rem 0.2rem 1rem 2rem;
     border-radius: 0.5rem;
     box-shadow: 0px 4px 8px 2px rgba(34, 60, 80, 0.2);
     margin-bottom: 1rem;
+    cursor: pointer;
 
     &:hover {
         transform: translateY(-2px);
@@ -103,7 +118,9 @@ export default {
 }
 
 .reminder__text {
-    word-break: break-word;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .reminder__edit-button {

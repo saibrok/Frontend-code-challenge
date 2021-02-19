@@ -1,9 +1,6 @@
 <template>
     <form class="edit-popup" @submit.prevent="submitReminder">
         <h2 class="edit-popup__title">Новое напоминание</h2>
-        <TheButton class="edit-popup__close-button" @onClick="closePopup">
-            X
-        </TheButton>
         <div class="edit-popup__input-wrapper">
             <input
                 class="edit-popup__input edit-popup__input-text"
@@ -13,9 +10,9 @@
                 ref="inputtext"
                 :maxlength="maxLength"
             />
-            <span class="edit-popup__counter"
-                >{{ reminder.note.length }} / {{ maxLength }}</span
-            >
+            <span class="edit-popup__counter">
+                {{ maxLength - reminder.note.length }}
+            </span>
         </div>
         <div class="edit-popup__input-wrapper">
             <input
@@ -84,10 +81,6 @@ export default {
         submitReminder() {
             this.$store.dispatch('reminders/submitReminder', this.reminder);
         },
-
-        closePopup() {
-            this.$store.dispatch('closePopup');
-        },
     },
 
     mounted() {
@@ -108,12 +101,6 @@ export default {
 
 .edit-popup__title {
     margin-bottom: 2rem;
-}
-
-.edit-popup__close-button {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
 }
 
 .edit-popup__input-wrapper {

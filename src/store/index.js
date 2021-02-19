@@ -11,11 +11,16 @@ export default new Vuex.Store({
     state: {
         isDataLoading: false,
         isOpenPopup: false,
+        popupContent: 'ReminderEdit',
     },
 
     mutations: {
         SET_LOADING_STATUS(state, status) {
             state.isDataLoading = status;
+        },
+
+        SET_POPUP_CONTENT(state, content) {
+            state.popupContent = content;
         },
 
         OPEN_POPUP(state) {
@@ -30,6 +35,10 @@ export default new Vuex.Store({
     actions: {
         setLoadingStatus({ commit }, status) {
             commit('SET_LOADING_STATUS', status);
+        },
+
+        setPopupContent({ commit }, content) {
+            commit('SET_POPUP_CONTENT', content);
         },
 
         openPopup({ commit }) {
