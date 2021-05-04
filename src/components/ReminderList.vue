@@ -1,6 +1,6 @@
 <template>
     <div class="reminders__wrapper">
-        <template v-if="filteredReminders.length > 0">
+        <template v-if="isAuthorized">
             <FilterList @toggleFilter="toggleFilter" />
             <ul class="reminders__list">
                 <ReminderItem
@@ -10,7 +10,10 @@
                 />
             </ul>
         </template>
-        <div v-else-if="isAuthorized" class="reminders__empty">
+        <div
+            v-if="isAuthorized && filteredReminders.length <= 0"
+            class="reminders__empty"
+        >
             Список напоминаний пуст
         </div>
         <TheLoader class="loader" v-if="isDataLoading" />
