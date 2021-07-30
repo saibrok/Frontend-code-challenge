@@ -27,7 +27,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ### Поднять json сервер
 ```
 json-server --watch src/db/db.json
---delay 1000 Добавить задержку к ответам
+json-server --watch src/db/db.json --delay 1000 Добавить задержку к ответам
 
 в api.js поменять baseUrl на 'http://localhost:3000/'
 в auth() заменить post на get

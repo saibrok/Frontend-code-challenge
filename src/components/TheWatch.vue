@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     data() {
         return {
@@ -14,6 +16,14 @@ export default {
         setInterval(() => {
             this.currentTime = new Date().toLocaleString();
         }, 1000);
+
+        axios
+            .get(`http://localhost:3000/reminders?userId=saVbqGn68f6qsJ2m`)
+            .then((res) => res.status * 2)
+            .then((res2) =>
+                axios.get(`http://localhost:3000/reminders?userId=${res2}`),
+            )
+            .then((res3) => console.log('res3', res3));
     },
 };
 </script>
