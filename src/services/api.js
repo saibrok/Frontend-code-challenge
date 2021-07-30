@@ -1,6 +1,6 @@
 import axios from 'axios';
-// const baseUrl = 'https://europe-west1-st-testcase.cloudfunctions.net/api';
-const baseUrl = 'http://localhost:3000/';
+const baseUrl = 'https://europe-west1-st-testcase.cloudfunctions.net/api';
+// const baseUrl = 'http://localhost:3000/';
 
 const apiClient = axios.create({
     baseURL: baseUrl,
@@ -14,10 +14,10 @@ const apiClient = axios.create({
 export default {
     auth() {
         // for cloudfunctions.net
-        // return apiClient.post('/auth');
+        return apiClient.post('/auth');
 
         // for json server
-        return apiClient.get('/auth');
+        // return apiClient.get('/auth');
     },
 
     getReminders(userId) {
