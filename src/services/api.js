@@ -14,10 +14,10 @@ const apiClient = axios.create({
 export default {
     auth() {
         // for cloudfunctions.net
-        // return apiClient.post('/auth');
+        return apiClient.post('/auth');
 
         // for json server
-        return apiClient.get('/auth');
+        // return apiClient.get('/auth');
     },
 
     getReminders(userId) {
