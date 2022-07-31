@@ -1,6 +1,6 @@
 import axios from 'axios';
-// const baseUrl = 'https://europe-west1-st-testcase.cloudfunctions.net/api';
-const baseUrl = 'http://localhost:3000/';
+const baseUrl = 'https://europe-west1-st-testcase.cloudfunctions.net/api';
+// const baseUrl = 'http://localhost:3000/';
 
 const apiClient = axios.create({
     baseURL: baseUrl,
